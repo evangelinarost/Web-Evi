@@ -1,25 +1,24 @@
+import { existsSync } from "node:fs";
+import path from "node:path";
 import Hero from "@/components/Hero";
-import Marquee from "@/components/Marquee";
 import Services from "@/components/Services";
-import Portfolio from "@/components/Portfolio";
-import Process from "@/components/Process";
+import Projects from "@/components/Projects";
 import About from "@/components/About";
-import Differentiator from "@/components/Differentiator";
-import Stats from "@/components/Stats";
 import CTA from "@/components/CTA";
+import { hero } from "@/lib/content";
 
 export default function Home() {
+  // Si existe la versión sonriente del sticker en public/sticker/, se activa sola.
+  const smileSrc = existsSync(path.join(process.cwd(), "public", "sticker", hero.smileFile))
+    ? `/sticker/${hero.smileFile}`
+    : null;
+
   return (
     <main>
-      <Hero />
-      <Marquee />
+      <Hero smileSrc={smileSrc} />
       <Services />
-      <Portfolio />
-      <Process />
+      <Projects />
       <About />
-      <Marquee dark />
-      <Differentiator />
-      <Stats />
       <CTA />
     </main>
   );

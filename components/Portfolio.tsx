@@ -9,7 +9,7 @@ const cmSubcats = [
   {
     label: "Diseño de carruseles",
     desc: "Piezas de carrusel pensadas para informar y enganchar.",
-    color: "#822B5B",
+    color: "#C34811",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
         <rect x="7" y="4" width="10" height="16" rx="2" />
@@ -20,7 +20,7 @@ const cmSubcats = [
   {
     label: "Reels",
     desc: "Videos cortos para crecer y mantener la cuenta activa.",
-    color: "#3FBDBC",
+    color: "#1F3FA0",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="4" width="18" height="16" rx="3" />
@@ -32,7 +32,7 @@ const cmSubcats = [
   {
     label: "Estadísticas",
     desc: "Resultados y crecimiento medibles de las cuentas.",
-    color: "#3696A2",
+    color: "#0B369A",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
         <path d="M3 3v18h18" />
@@ -86,7 +86,7 @@ const carousels: { title: string; slides: string[] }[] = [
 const contentGroups = [
   {
     label: "UGC",
-    color: "#822B5B",
+    color: "#C34811",
     videos: [
       "https://pub-0cd1a326d662425eb94608296f4a31d0.r2.dev/ugc/Mochi%203.mp4",
       "https://pub-0cd1a326d662425eb94608296f4a31d0.r2.dev/ugc/copy_D7B95BF4-F0A1-41B2-B8CA-BE569207FD45.mp4",
@@ -100,7 +100,7 @@ const contentGroups = [
   },
   {
     label: "Contenido para marcas",
-    color: "#3FBDBC",
+    color: "#1F3FA0",
     videos: [
       "https://pub-0cd1a326d662425eb94608296f4a31d0.r2.dev/contenido%20general/Campe%20bolsita%20%20(1).mp4",
       "https://pub-0cd1a326d662425eb94608296f4a31d0.r2.dev/contenido%20general/Curio%2020%25.mp4",
@@ -173,7 +173,7 @@ function VideoTile({
   }, [sound]);
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl bg-black aspect-[9/16] shadow-sm ring-1 ring-[#1A1A1A]/5 hover:ring-[#822B5B]/30 hover:shadow-xl transition-all duration-300">
+    <div className="group relative overflow-hidden rounded-2xl bg-black aspect-[9/16] shadow-sm ring-1 ring-[#0E2159]/5 hover:ring-[#C34811]/30 hover:shadow-xl transition-all duration-300">
       <video
         ref={ref}
         src={src}
@@ -233,7 +233,7 @@ function CarouselTile({ title, slides }: { title: string; slides: string[] }) {
   }, [i]);
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl bg-black aspect-[4/5] shadow-sm ring-1 ring-[#1A1A1A]/5 hover:ring-[#822B5B]/30 hover:shadow-xl transition-all duration-300">
+    <div className="group relative overflow-hidden rounded-2xl bg-black aspect-[4/5] shadow-sm ring-1 ring-[#0E2159]/5 hover:ring-[#C34811]/30 hover:shadow-xl transition-all duration-300">
       {slides.map((src, idx) =>
         isVideo(src) ? (
           <video
@@ -329,9 +329,9 @@ function GroupHeader({
   return (
     <div className="flex items-center gap-2.5 mb-5">
       <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: color }} />
-      <h4 className="font-bold text-[#1A1A1A] text-lg">{label}</h4>
+      <h4 className="font-bold text-[#0E2159] text-lg">{label}</h4>
       {count != null && (
-        <span className="text-[#1A1A1A]/35 text-sm font-semibold">{count}</span>
+        <span className="text-[#0E2159]/35 text-sm font-semibold">{count}</span>
       )}
     </div>
   );
@@ -340,7 +340,7 @@ function GroupHeader({
 /** Estado vacío para subcategorías sin contenido todavía. */
 function ComingSoon({ color }: { color: string }) {
   return (
-    <div className="rounded-2xl border border-dashed border-[#1A1A1A]/15 bg-white/50 py-12 text-center">
+    <div className="rounded-2xl border border-dashed border-[#0E2159]/15 bg-white/50 py-12 text-center">
       <span
         className="text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full"
         style={{ backgroundColor: color + "14", color }}
@@ -372,10 +372,10 @@ function CategoryHeader({
           {number}
         </span>
         <div>
-          <h3 className="text-2xl sm:text-3xl font-black text-[#1A1A1A] leading-tight">
+          <h3 className="text-2xl sm:text-3xl font-black text-[#0E2159] leading-tight">
             {title}
           </h3>
-          <p className="mt-1 text-sm text-[#1A1A1A]/50">{desc}</p>
+          <p className="mt-1 text-sm text-[#0E2159]/50">{desc}</p>
         </div>
       </div>
       <div
@@ -390,26 +390,26 @@ function CategoryHeader({
 
 export default function Portfolio() {
   return (
-    <section id="portfolio" className="relative py-28 px-6 overflow-hidden bg-[#FAF8F5]">
+    <section id="portfolio" className="relative py-28 px-6 overflow-hidden bg-[#ECE7E2]">
       {/* Dot grid */}
       <div className="dot-grid absolute inset-0 opacity-50" />
 
       {/* Blob */}
-      <div className="pointer-events-none absolute top-20 left-1/2 -translate-x-1/2 w-[500px] h-[300px] rounded-full bg-[#822B5B]/16 blur-[100px]" />
+      <div className="pointer-events-none absolute top-20 left-1/2 -translate-x-1/2 w-[500px] h-[300px] rounded-full bg-[#C34811]/16 blur-[100px]" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Encabezado general */}
         <div className="reveal text-center mb-20">
-          <span className="inline-flex items-center gap-2 text-sm font-semibold tracking-widest uppercase text-[#822B5B] mb-4">
-            <span className="w-4 h-px bg-[#822B5B]" />
+          <span className="inline-flex items-center gap-2 text-sm font-semibold tracking-widest uppercase text-[#C34811] mb-4">
+            <span className="w-4 h-px bg-[#C34811]" />
             Portfolio
-            <span className="w-4 h-px bg-[#822B5B]" />
+            <span className="w-4 h-px bg-[#C34811]" />
           </span>
-          <h2 className="text-3xl sm:text-4xl font-black text-[#1A1A1A]">
+          <h2 className="text-3xl sm:text-4xl font-black text-[#0E2159]">
             Trabajo real,{" "}
-            <span className="text-[#822B5B]">resultados reales</span>
+            <span className="text-[#C34811]">resultados reales</span>
           </h2>
-          <p className="mt-4 text-[#1A1A1A]/55 max-w-xl mx-auto">
+          <p className="mt-4 text-[#0E2159]/55 max-w-xl mx-auto">
             Mi trabajo dividido en las tres áreas en las que ayudo a las marcas.
           </p>
         </div>
@@ -418,13 +418,13 @@ export default function Portfolio() {
         <div
           id="community-manager"
           className="mb-10 rounded-[28px] border p-7 sm:p-10 scroll-mt-28"
-          style={{ borderColor: "#822B5B22", background: "#822B5B08" }}
+          style={{ borderColor: "#C3481122", background: "#C3481108" }}
         >
           <CategoryHeader
             number="01"
             title="Community Manager"
             desc="Gestiono tus redes de punta a punta: contenido, diseño y resultados."
-            color="#822B5B"
+            color="#C34811"
           />
           <div className="space-y-12">
             {cmSubcats.map((sub) => {
@@ -460,13 +460,13 @@ export default function Portfolio() {
         <div
           id="creadora-contenido"
           className="mb-10 rounded-[28px] border p-7 sm:p-10 scroll-mt-28"
-          style={{ borderColor: "#3FBDBC2E", background: "#3FBDBC0D" }}
+          style={{ borderColor: "#1F3FA02E", background: "#1F3FA00D" }}
         >
           <CategoryHeader
             number="02"
             title="Creadora de contenido"
             desc="Videos y piezas creadas para distintas marcas y campañas."
-            color="#3FBDBC"
+            color="#1F3FA0"
           />
           <div className="space-y-12">
             {contentGroups.map((group) => (
@@ -476,8 +476,8 @@ export default function Portfolio() {
                     className="w-2.5 h-2.5 rounded-full"
                     style={{ backgroundColor: group.color }}
                   />
-                  <h4 className="font-bold text-[#1A1A1A] text-lg">{group.label}</h4>
-                  <span className="text-[#1A1A1A]/35 text-sm font-semibold">
+                  <h4 className="font-bold text-[#0E2159] text-lg">{group.label}</h4>
+                  <span className="text-[#0E2159]/35 text-sm font-semibold">
                     {group.videos.length}
                   </span>
                 </div>
@@ -491,13 +491,13 @@ export default function Portfolio() {
         <div
           id="desarrollo-web"
           className="rounded-[28px] border p-7 sm:p-10 scroll-mt-28"
-          style={{ borderColor: "#3696A22E", background: "#3696A20D" }}
+          style={{ borderColor: "#0B369A2E", background: "#0B369A0D" }}
         >
           <CategoryHeader
             number="03"
             title="Diseño y desarrollo web"
             desc="Sitios y landing pages a medida, online y funcionando."
-            color="#3696A2"
+            color="#0B369A"
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {websites.map((site, i) => (
@@ -506,7 +506,7 @@ export default function Portfolio() {
                 href={site.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`reveal reveal-d${i + 1} group relative rounded-2xl overflow-hidden border border-[#1A1A1A]/10 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300`}
+                className={`reveal reveal-d${i + 1} group relative rounded-2xl overflow-hidden border border-[#0E2159]/10 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300`}
               >
                 <div className="relative w-full aspect-video overflow-hidden">
                   <Image
@@ -516,15 +516,15 @@ export default function Portfolio() {
                     sizes="(max-width: 640px) 100vw, 50vw"
                     className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-[#822B5B]/0 group-hover:bg-[#822B5B]/20 transition-colors duration-300 flex items-center justify-center">
-                    <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white text-[#822B5B] font-bold text-sm px-4 py-2 rounded-full shadow-lg">
+                  <div className="absolute inset-0 bg-[#C34811]/0 group-hover:bg-[#C34811]/20 transition-colors duration-300 flex items-center justify-center">
+                    <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white text-[#C34811] font-bold text-sm px-4 py-2 rounded-full shadow-lg">
                       Ver sitio →
                     </span>
                   </div>
                 </div>
-                <div className="px-4 py-3 bg-white border-t border-[#1A1A1A]/6">
-                  <p className="font-bold text-[#1A1A1A] text-sm">{site.name}</p>
-                  <p className="text-xs text-[#1A1A1A]/40 mt-0.5 truncate">
+                <div className="px-4 py-3 bg-white border-t border-[#0E2159]/6">
+                  <p className="font-bold text-[#0E2159] text-sm">{site.name}</p>
+                  <p className="text-xs text-[#0E2159]/40 mt-0.5 truncate">
                     {site.url.replace(/https?:\/\/(www\.)?/, "")}
                   </p>
                 </div>

@@ -1,25 +1,20 @@
 import type { Metadata } from "next";
-import { Geist, Bricolage_Grotesque } from "next/font/google";
+import { Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const hanken = Hanken_Grotesk({
+  variable: "--font-hanken",
   subsets: ["latin"],
-});
-
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Evangelina | Contenido & Estrategia Digital",
+  title: "Evii Rost | Marketing digital y community manager",
   description:
-    "Creadora UGC y estratega digital. Ayudo a marcas y emprendedores a crecer en digital con contenido, estrategia y desarrollo web.",
+    "Evii Rost, community manager y creadora de contenido de Córdoba, Argentina. Estrategia, contenido y campañas para que tu marca conecte con las personas.",
 };
 
 export default function RootLayout({
@@ -28,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${geistSans.variable} ${bricolage.variable}`}>
+    <html lang="es-AR" className={hanken.variable}>
       <body>
         <Navbar />
         {children}

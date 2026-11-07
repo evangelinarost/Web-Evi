@@ -19,7 +19,7 @@ export default function Marquee({ dark = false }: MarqueeProps) {
   return (
     <div
       className={`relative overflow-hidden py-4 ${
-        dark ? "bg-[#1A1A1A]" : "bg-[#822B5B]"
+        dark ? "bg-[#0E2159]" : "bg-[#C34811]"
       }`}
     >
       <div className="marquee-track">
@@ -31,7 +31,7 @@ export default function Marquee({ dark = false }: MarqueeProps) {
             }`}
           >
             {word}
-            <span className={dark ? "text-[#822B5B]/50" : "text-white/40"}>
+            <span className={dark ? "text-[#C34811]/50" : "text-white/40"}>
               ✦
             </span>
           </span>

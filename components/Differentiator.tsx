@@ -8,10 +8,10 @@ const pillars = [
         <path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.5 2.5M16.5 16.5 19 19M19 5l-2.5 2.5M7.5 16.5 5 19" />
       </svg>
     ),
-    color: "#822B5B",
-    bg: "bg-[#822B5B]/10",
-    border: "border-[#822B5B]/25",
-    glow: "hover:shadow-[0_0_50px_#822B5B20]",
+    color: "#C34811",
+    bg: "bg-[#C34811]/10",
+    border: "border-[#C34811]/25",
+    glow: "hover:shadow-[0_0_50px_#C3481120]",
   },
   {
     label: "Coherencia total",
@@ -22,10 +22,10 @@ const pillars = [
         <circle cx="12" cy="12" r="9" />
       </svg>
     ),
-    color: "#3FBDBC",
-    bg: "bg-[#3FBDBC]/10",
-    border: "border-[#3FBDBC]/25",
-    glow: "hover:shadow-[0_0_50px_#3FBDBC20]",
+    color: "#1F3FA0",
+    bg: "bg-[#1F3FA0]/10",
+    border: "border-[#1F3FA0]/25",
+    glow: "hover:shadow-[0_0_50px_#1F3FA020]",
   },
   {
     label: "Visión estratégica",
@@ -37,10 +37,10 @@ const pillars = [
         <circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none" />
       </svg>
     ),
-    color: "#3696A2",
-    bg: "bg-[#3696A2]/10",
-    border: "border-[#3696A2]/25",
-    glow: "hover:shadow-[0_0_50px_#3696A220]",
+    color: "#0B369A",
+    bg: "bg-[#0B369A]/10",
+    border: "border-[#0B369A]/25",
+    glow: "hover:shadow-[0_0_50px_#0B369A20]",
   },
 ];
 
@@ -48,9 +48,9 @@ export default function Differentiator() {
   return (
     <section id="diferencial" className="grain relative py-28 px-6 overflow-hidden">
       {/* Mesh gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#1A1A1A] via-[#1E1E22] to-[#161618]" />
-      <div className="mesh-blob pointer-events-none absolute top-0 left-1/4 w-[500px] h-[400px] rounded-full bg-[#822B5B]/32 blur-[140px]" />
-      <div className="mesh-blob-alt pointer-events-none absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full bg-[#3FBDBC]/32 blur-[120px]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0E2159] via-[#1E1E22] to-[#161618]" />
+      <div className="mesh-blob pointer-events-none absolute top-0 left-1/4 w-[500px] h-[400px] rounded-full bg-[#C34811]/32 blur-[140px]" />
+      <div className="mesh-blob-alt pointer-events-none absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full bg-[#1F3FA0]/32 blur-[120px]" />
 
       {/* Grid lines */}
       <div
@@ -70,15 +70,15 @@ export default function Differentiator() {
       </div>
 
       <div className="reveal relative z-10 max-w-4xl mx-auto text-center">
-        <span className="inline-flex items-center gap-2 text-sm font-semibold tracking-widest uppercase text-[#822B5B] mb-6">
-          <span className="w-4 h-px bg-[#822B5B]" />
+        <span className="inline-flex items-center gap-2 text-sm font-semibold tracking-widest uppercase text-[#C34811] mb-6">
+          <span className="w-4 h-px bg-[#C34811]" />
           Por qué elegirme
-          <span className="w-4 h-px bg-[#822B5B]" />
+          <span className="w-4 h-px bg-[#C34811]" />
         </span>
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-[1.05] mb-6">
           No soy solo creadora ni solo estratega.
           <br />
-          <span className="text-[#822B5B]">
+          <span className="text-[#C34811]">
             Trabajo como un área digital completa.
           </span>
         </h2>

@@ -1,177 +1,232 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { hero, serviceDetails } from "@/lib/content";
+import Sticker from "./Sticker";
+import ServiceDialog from "./ServiceDialog";
 
-const stats = [
-  { value: "+200", label: "Videos" },
-  { value: "~40", label: "Marcas" },
-  { value: "+150k", label: "Seguidores" },
+/* Pieza clickeable del collage (medidas en px del lienzo 700x340). Es un <button>:
+   todo su interior son <span> para que el HTML sea válido. */
+function Piece({
+  id,
+  title,
+  onOpen,
+  className = "",
+  style,
+  i,
+  barBottom = false,
+  plain = false,
+  btnRef,
+  children,
+}: {
+  id: string;
+  title: string;
+  onOpen: (id: string, el: HTMLButtonElement) => void;
+  className?: string;
+  style?: CSSProperties;
+  i: number;
+  barBottom?: boolean;
+  plain?: boolean; // sin barra de ventana (nota, tarjeta)
+  btnRef?: React.Ref<HTMLButtonElement>;
+  children?: ReactNode;
+}) {
+  const bar = (
+    <span className={`flex items-center gap-1.5 bg-[#ECE7E2] px-3 py-2 ${barBottom ? "border-t" : "border-b"} border-[#D9D1CA]`}>
+      <span className="cw-dots flex items-center gap-1.5">
+        <i className="h-[7px] w-[7px] rounded-full bg-[#C34811]" />
+        <i className="h-[7px] w-[7px] rounded-full bg-[#B8AFA5]" />
+        <i className="h-[7px] w-[7px] rounded-full bg-[#B8AFA5]" />
+      </span>
+      <b className="cw-title ml-1 whitespace-nowrap font-bold tracking-tight text-[#0B369A] sm:ml-2">{title}</b>
+    </span>
+  );
+  return (
+    <button
+      ref={btnRef}
+      type="button"
+      aria-haspopup="dialog"
+      aria-label={`${title}: ver detalle`}
+      onClick={(e) => onOpen(id, e.currentTarget)}
+      className={`cw cw-btn ${plain ? "" : "overflow-hidden rounded-[10px] border border-[#D9D1CA] bg-[#FAF8F5]"} ${className}`}
+      style={{ ...style, "--i": i } as CSSProperties}
+    >
+      {!plain && !barBottom && bar}
+      {plain ? children : <span className="relative block flex-1">{children}</span>}
+      {!plain && barBottom && bar}
+    </button>
+  );
+}
+
+type Cell = ["b" | "t" | "g", string];
+const calendar: Cell[][] = [
+  [["g", ""], ["b", "Post"], ["g", ""], ["t", "Reel"], ["g", ""], ["b", "Story"], ["g", ""]],
+  [["t", "Reel"], ["g", ""], ["b", "Post"], ["g", ""], ["t", "Story"], ["b", "Reel"], ["g", ""]],
 ];
+const cellColor = { b: "bg-[#0B369A]", t: "bg-[#C34811]", g: "bg-[#ECE7E2]" } as const;
 
-export default function Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [muted, setMuted] = useState(true);
+export default function Hero({ smileSrc = null }: { smileSrc?: string | null }) {
+  const stageRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
+  const creationRef = useRef<HTMLButtonElement>(null);
+  const [openId, setOpenId] = useState<string | null>(null);
+  const service = serviceDetails.items.find((s) => s.id === openId) ?? null;
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+  const open = (id: string, el?: HTMLElement | null) => {
+    triggerRef.current = el ?? null;
+    setOpenId(id); // una ventana por vez
+  };
+  const close = () => {
+    setOpenId(null);
+    // Devuelve el foco a lo que abrió la ventana, sin mover el scroll.
+    requestAnimationFrame(() => triggerRef.current?.focus({ preventScroll: true }));
+  };
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) video.play().catch(() => {});
-        else video.pause();
-      },
-      { threshold: 0.3 }
-    );
-
-    observer.observe(video);
-    return () => observer.disconnect();
-  }, []);
+  // Profundidad con el cursor: solo escritorio con mouse y sin movimiento reducido,
+  // y limitada al área del collage.
+  const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = stageRef.current;
+    if (!el) return;
+    const ok =
+      window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 1024px)").matches &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!ok) return;
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    el.style.setProperty("--px", `${(x * 14).toFixed(1)}px`);
+    el.style.setProperty("--py", `${(y * 10).toFixed(1)}px`);
+  };
+  const onLeave = () => {
+    stageRef.current?.style.setProperty("--px", "0px");
+    stageRef.current?.style.setProperty("--py", "0px");
+  };
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden px-6 pt-28 pb-16">
-      {/* Fondo */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#FAF8F5] via-[#FAF6F6] to-[#EEF5F5]" />
-      <div className="pointer-events-none absolute -top-32 -left-24 w-[520px] h-[520px] rounded-full bg-[#822B5B]/20 blur-[130px]" />
-      <div className="pointer-events-none absolute -bottom-32 -right-16 w-[460px] h-[460px] rounded-full bg-[#3FBDBC]/20 blur-[120px]" />
-      <div className="dot-grid absolute inset-0 opacity-30" />
+    <section id="inicio" className="dots relative overflow-hidden px-6 pb-16 pt-[72px] text-center lg:pb-20">
+      {/* Círculos decorativos */}
+      <div aria-hidden className="pointer-events-none absolute -bottom-[14%] -left-[16%] max-[899px]:hidden aspect-square w-[min(56vw,560px)] min-w-[260px] rounded-full bg-[#0B369A]" />
+      <div aria-hidden className="pointer-events-none absolute -right-[10%] bottom-[8%] max-[899px]:hidden aspect-square w-[min(36vw,430px)] min-w-[170px] rounded-full bg-[#C34811]" />
+      <div aria-hidden className="pointer-events-none absolute -bottom-[10%] left-[68%] max-[899px]:hidden aspect-square w-[min(14vw,200px)] min-w-[80px] rounded-full bg-[#0B369A]" />
 
-      <div className="relative z-10 max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-12 lg:gap-16 items-center">
+      <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center">
+        <h1 className="text-[54px] font-bold leading-[1] tracking-[-0.03em] text-[#0B369A] md:text-[96px]">
+          {hero.title}
+        </h1>
+        <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#3A332E] sm:text-sm md:mt-4">
+          {hero.eyebrow}
+        </p>
 
-        {/* Columna izquierda */}
-        <div className="reveal">
-          {/* Píldora de disponibilidad */}
-          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/70 backdrop-blur-sm border border-[#1A1A1A]/8 text-xs font-semibold text-[#1A1A1A]/70 mb-7 shadow-sm">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#3FBDBC] opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#3FBDBC]" />
-            </span>
-            Disponible para nuevos proyectos
-          </span>
-
-          <h1 className="text-4xl sm:text-5xl xl:text-[3.4rem] font-black text-[#1A1A1A] leading-[1.06] mb-6 tracking-tight">
-            Creación de{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10 text-[#822B5B]">Contenido</span>
-              <span className="absolute bottom-1 left-0 w-full h-3 bg-[#822B5B]/20 -z-0 rounded-sm" />
-            </span>
-            , gestión de{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10 text-[#822B5B]">Redes</span>
-              <span className="absolute bottom-1 left-0 w-full h-3 bg-[#822B5B]/20 -z-0 rounded-sm" />
-            </span>
-            {" "}+{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10 text-[#822B5B]">Desarrollo web</span>
-              <span className="absolute bottom-1 left-0 w-full h-3 bg-[#822B5B]/20 -z-0 rounded-sm" />
-            </span>
-          </h1>
-
-          <p className="text-lg text-[#1A1A1A]/60 leading-relaxed mb-9 max-w-lg">
-            Soy Evangelina y trabajo como tu área digital completa: community
-            management, creación de contenido y desarrollo web. Vos te enfocás en
-            tu negocio, yo me encargo de tu presencia online.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4">
-            <a
-              href="#portfolio"
-              className="px-8 py-4 rounded-2xl bg-[#822B5B] text-white font-bold text-base hover:bg-[#3696A2] transition-all duration-200 text-center shadow-lg shadow-[#822B5B]/30 hover:shadow-[#822B5B]/50 hover:-translate-y-0.5"
+        {/* Collage de servicios (700×340): cinco piezas clickeables */}
+        <div
+          className="collage-box mt-8 md:mt-10"
+          onPointerMove={onMove}
+          onPointerLeave={onLeave}
+          role="group"
+          aria-label="Mis servicios"
+        >
+          <div ref={stageRef} className="collage-stage">
+            {/* Creación de contenido (ventana azul) + sticker encima */}
+            <Piece
+              id="contenido"
+              title="Creación de contenido"
+              onOpen={open}
+              i={0}
+              barBottom
+              btnRef={creationRef}
+              className="z-[3]"
+              style={{ left: 258, top: 98, width: 240, height: 224 }}
             >
-              Ver portfolio
-            </a>
-            <a
-              href="#cta"
-              className="px-8 py-4 rounded-2xl border-2 border-[#3FBDBC] text-[#3FBDBC] font-bold text-base hover:bg-[#3FBDBC] hover:text-white transition-all duration-200 text-center hover:-translate-y-0.5"
+              <span className="absolute inset-0 block bg-[#0B369A]" />
+            </Piece>
+
+            {/* Gestión de redes */}
+            <Piece id="redes" title="Gestión de redes" onOpen={open} i={1} className="z-[2]" style={{ left: 0, top: 8, width: 285, height: 152 }}>
+              <span className="block px-3 pt-2.5">
+                <span className="mb-1.5 grid grid-cols-7 gap-1 text-center text-[9px] font-semibold text-[#3A332E]/70">
+                  {["L", "M", "X", "J", "V", "S", "D"].map((d) => <span key={d}>{d}</span>)}
+                </span>
+                {calendar.map((row, r) => (
+                  <span key={r} className="mb-1 grid grid-cols-7 gap-1">
+                    {row.map(([kind, label], k) => (
+                      <span key={k} className={`flex h-[22px] items-center justify-center rounded-[5px] text-[8px] font-bold text-white ${cellColor[kind]}`}>
+                        {label}
+                      </span>
+                    ))}
+                  </span>
+                ))}
+              </span>
+            </Piece>
+
+            {/* Gestión de pauta — leyenda + gráfico ilustrativo, sin números */}
+            <Piece id="pauta" title="Gestión de pauta" onOpen={open} i={2} className="z-[2]" style={{ left: 522, top: 0, width: 178, height: 122 }}>
+              <span className="flex items-center gap-3 px-3 pt-2 text-[8.5px] font-semibold text-[#0B369A]">
+                <span className="flex items-center gap-1"><i className="h-[6px] w-[6px] rounded-full bg-[#0B369A]" />Alcance</span>
+                <span className="flex items-center gap-1"><i className="h-[6px] w-[6px] rounded-full bg-[#C34811]" />Clientes</span>
+              </span>
+              <svg viewBox="0 0 180 70" className="block w-full px-2" fill="none" aria-hidden>
+                <path d="M8 62H172" stroke="#D9D1CA" strokeWidth="1.5" />
+                <path d="M10 50 38 38 70 42 104 24 140 16 168 6" stroke="#0B369A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M10 58 40 54 74 50 108 40 140 34 168 26" stroke="#C34811" strokeWidth="2" strokeDasharray="1.5 4" strokeLinecap="round" />
+              </svg>
+            </Piece>
+
+            {/* Edición de video */}
+            <Piece id="video" title="Edición de video" onOpen={open} i={3} className="z-[2]" style={{ left: 22, top: 178, width: 285, height: 144 }}>
+              <span className="relative block px-3 pt-3">
+                <span className="flex gap-1.5">
+                  <span className="h-[18px] w-[92px] rounded-[4px] bg-[#0B369A]" />
+                  <span className="h-[18px] w-[46px] rounded-[4px] bg-[#C34811]" />
+                  <span className="h-[18px] flex-1 rounded-[4px] bg-[#0B369A]" />
+                </span>
+                <span className="ml-7 mt-2 flex gap-1.5">
+                  <span className="flex h-[14px] w-[100px] items-center rounded-[4px] bg-[#A89F95] px-1.5 text-[7.5px] font-bold leading-none text-white">Subtítulos</span>
+                  <span className="h-[14px] w-[62px] rounded-[4px] bg-[#D9D1CA]" />
+                </span>
+                <span className="mt-2 flex gap-1.5">
+                  <span className="h-[12px] w-[150px] rounded-[4px] bg-[#D9D1CA]" />
+                  <span className="h-[12px] w-[50px] rounded-[4px] bg-[#A89F95]" />
+                </span>
+                <span aria-hidden className="absolute bottom-3 left-[44%] top-1.5 w-[2px] bg-[#C34811]" />
+              </span>
+            </Piece>
+
+            {/* Diseño de posteos — tarjeta rotada 3°, debajo de Gestión de pauta */}
+            <Piece
+              id="posteos"
+              title="Diseño de posteos"
+              onOpen={open}
+              i={4}
+              plain
+              className="z-[2] justify-between rounded-[16px] border-[5px] border-[#FAF8F5] bg-[#0B369A] p-4"
+              style={{ left: 528, top: 136, width: 158, height: 192, rotate: "3deg" }}
             >
-              Contactame
-            </a>
-          </div>
+              <span className="block text-left text-[9px] font-bold uppercase leading-[1.25] tracking-[0.14em] text-white">
+                Diseño de<br />posteos
+              </span>
+              <span className="block text-left text-[24px] font-bold leading-[1.05] tracking-[-0.03em] text-white">
+                Tu marca,
+                <br />
+                <span className="text-[#FF8A5C]">en el feed</span>
+              </span>
+              <span className="block h-[5px] w-[34px] rounded-full bg-[#FF8A5C]" />
+            </Piece>
 
-          {/* Stats */}
-          <div className="mt-10 flex items-center gap-6 sm:gap-8">
-            {stats.map((s, i) => (
-              <div key={s.label} className="flex items-center gap-6 sm:gap-8">
-                {i > 0 && <span className="h-9 w-px bg-[#1A1A1A]/10" />}
-                <div>
-                  <p className="text-2xl font-black text-[#1A1A1A] leading-none">
-                    {s.value}
-                  </p>
-                  <p className="text-xs text-[#1A1A1A]/45 mt-1">{s.label}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Columna derecha — video */}
-        <div className="reveal reveal-d2 relative flex items-center justify-center">
-          {/* Halo de color detrás */}
-          <div className="absolute inset-6 rounded-[2rem] bg-gradient-to-br from-[#822B5B]/30 to-[#3FBDBC]/30 -z-10 blur-2xl" />
-
-          <div className="relative w-full max-w-sm mx-auto lg:max-w-none rounded-[1.75rem] overflow-hidden shadow-2xl shadow-[#822B5B]/15 bg-[#1A1A1A] aspect-[9/16] lg:aspect-[4/5] ring-1 ring-white/40">
-            <video
-              ref={videoRef}
-              className="w-full h-full object-cover"
-              autoPlay
-              muted={muted}
-              loop
-              playsInline
-              disableRemotePlayback
-            >
-              <source src="https://pub-0cd1a326d662425eb94608296f4a31d0.r2.dev/Home.mp4" type="video/mp4" />
-            </video>
-
-            {/* Overlay gradient bottom */}
-            <div className="absolute bottom-0 left-0 w-full h-2/5 bg-gradient-to-t from-[#1A1A1A]/75 to-transparent pointer-events-none" />
-
-            {/* Botón mute/unmute */}
-            <button
-              onClick={() => {
-                const v = videoRef.current;
-                if (!v) return;
-                v.muted = !v.muted;
-                setMuted(v.muted);
-              }}
-              aria-label={muted ? "Activar sonido" : "Silenciar"}
-              className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/60 transition-colors"
-            >
-              {muted ? (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M11 5L6 9H2v6h4l5 4V5z" fill="white" fillOpacity="0.9" />
-                  <line x1="23" y1="9" x2="17" y2="15" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
-                  <line x1="17" y1="9" x2="23" y2="15" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
-                </svg>
-              ) : (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M11 5L6 9H2v6h4l5 4V5z" fill="white" fillOpacity="0.9" />
-                  <path d="M15.54 8.46a5 5 0 010 7.07" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
-                  <path d="M19.07 4.93a10 10 0 010 14.14" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
-                </svg>
-              )}
-            </button>
-
-            {/* Label en el video */}
-            <div className="absolute bottom-5 left-5 right-5">
-              <p className="text-white/80 text-xs font-semibold tracking-widest uppercase">
-                Evangelina — Tu área digital
-              </p>
-            </div>
-          </div>
-
-          {/* Badge flotante */}
-          <div className="absolute -top-4 -left-3 lg:top-6 lg:-left-8 bg-white rounded-2xl shadow-xl shadow-[#1A1A1A]/10 px-4 py-3 flex items-center gap-3 border border-[#1A1A1A]/5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#822B5B]/30 to-[#3FBDBC]/20 flex items-center justify-center text-base">
-              ✨
-            </div>
-            <div>
-              <p className="text-xs font-bold text-[#1A1A1A]">Redes · Contenido · Web</p>
-              <p className="text-xs text-[#1A1A1A]/45">Tu área digital completa</p>
-            </div>
+            {/* Sticker: capa independiente, por encima de todo */}
+            <Sticker className="absolute z-[5]" style={{ left: 232, top: 56, width: 296, height: 231 }} smileSrc={smileSrc} />
           </div>
         </div>
 
+        <p className="mt-4 text-[13px] text-[#3A332E] md:mt-5 md:text-sm">{hero.hint}</p>
+
+        <a
+          href={hero.cta.href}
+          className="relative z-10 mt-6 inline-flex items-center rounded-full bg-[#C34811] px-8 py-4 text-base font-semibold text-white shadow-lg shadow-[#C34811]/25 transition hover:-translate-y-0.5 hover:bg-[#0B369A] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0B369A] md:mt-8"
+        >
+          {hero.cta.label}
+        </a>
       </div>
+
+      {service && <ServiceDialog service={service} onClose={close} />}
     </section>
   );
 }

@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #FAF8F5;
-  --color-foreground: #1A1A1A;
-  --color-wine: #822B5B;
-  --color-teal: #3696A2;
-  --color-cyan: #3FBDBC;
-  --font-sans: var(--font-geist-sans);
-  --font-display: var(--font-display);
+  --color-piedra: #ECE7E2;
+  --color-piedra-claro: #FAF8F5;
+  --color-borde: #D9D1CA;
+  --color-azul: #0B369A;
+  --color-terracota: #C34811;
+  --color-terracota-claro: #FF8A5C;
+  --color-texto: #3A332E;
+  --font-sans: var(--font-hanken);
 }
 
 * {
@@ -20,23 +21,24 @@ html {
 }
 
 body {
-  background-color: #FAF8F5;
-  color: #1A1A1A;
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  background-color: #ECE7E2;
+  color: #3A332E;
+  font-family: var(--font-hanken), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 /* Display font for headings */
 h1, h2, h3 {
-  font-family: var(--font-display), var(--font-geist-sans), system-ui, sans-serif;
-  letter-spacing: -0.02em;
+  font-family: var(--font-hanken), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.03em;
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #FAF8F5; }
-::-webkit-scrollbar-thumb { background: #822B5B; border-radius: 99px; }
+::-webkit-scrollbar-track { background: #ECE7E2; }
+::-webkit-scrollbar-thumb { background: #C34811; border-radius: 99px; }
 
 /* Grain texture overlay */
 .grain::after {
@@ -66,7 +68,7 @@ h1, h2, h3 {
 
 /* Dot grid pattern */
 .dot-grid {
-  background-image: radial-gradient(circle, #1A1A1A18 1px, transparent 1px);
+  background-image: radial-gradient(circle, #0E215918 1px, transparent 1px);
   background-size: 28px 28px;
 }
 
@@ -107,4 +109,123 @@ h1, h2, h3 {
 }
 .mesh-blob-alt {
   animation: mesh-move 10s ease-in-out infinite reverse;
+}
+
+/* ------------------------------------------------------------------ */
+/* Hero: puntitos + collage de ventanas (700x340 escalado)             */
+/* ------------------------------------------------------------------ */
+.dots {
+  background-image: radial-gradient(circle, #C9C0B7 1.6px, transparent 1.6px);
+  background-size: 28px 28px;
+}
+
+/* El collage se diseña a 700x340 y se escala: 0.5 móvil, 1.2 escritorio */
+.collage-box { --s: 0.5; --float: calc(6px / var(--s)); width: calc(700px * var(--s)); height: calc(340px * var(--s)); position: relative; }
+.collage-stage { width: 700px; height: 340px; transform: scale(var(--s)); transform-origin: top left; position: relative; }
+/* Escala del collage, según la referencia: ocupa ~65 % del ancho de pantalla (1,35 a 1440 px).
+   En pantallas angostas el límite es el ancho (700 px de diseño x escala + 48 px de márgenes). */
+@media (min-width: 520px)  { .collage-box { --s: 0.675; } }
+@media (min-width: 660px)  { .collage-box { --s: 0.85; } }
+@media (min-width: 900px)  { .collage-box { --s: 0.9; } }
+@media (min-width: 1024px) { .collage-box { --s: 1; } }
+@media (min-width: 1100px) { .collage-box { --s: 1.05; } }
+@media (min-width: 1200px) { .collage-box { --s: 1.15; } }
+@media (min-width: 1300px) { .collage-box { --s: 1.25; } }
+@media (min-width: 1400px) { .collage-box { --s: 1.35; } }
+@media (min-width: 1700px) { .collage-box { --s: 1.5; } }
+/* Notebooks muy bajas: el collage sigue entrando completo en la primera pantalla */
+@media (min-width: 1024px) and (max-height: 720px) { .collage-box { --s: 1.1; } }
+
+.cw {
+  position: absolute;
+  animation: cw-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 110ms + 150ms);
+}
+@keyframes cw-in {
+  from { opacity: 0; translate: 0 18px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+/* Sticker: 4 capas independientes (profundidad > entrada > flote > hover) */
+.sticker-depth { transition: transform 0.25s ease-out; transform: translate3d(var(--px, 0px), var(--py, 0px), 0); }
+.sticker-enter { animation: sticker-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.55s both; }
+.sticker-float { animation: sticker-float 5s ease-in-out infinite; }
+.sticker-hover { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+@media (hover: hover) { .sticker-group:hover .sticker-hover { transform: scale(1.03); } }
+
+@keyframes sticker-in {
+  from { opacity: 0; translate: 0 22px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+/* Flota ~6 px reales en pantalla (se compensa la escala del collage con --float) */
+@keyframes sticker-float {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50%      { transform: translateY(calc(var(--float, 8px) * -1)) rotate(1.5deg); }
+}
+
+/* Movimiento reducido: versión estática */
+@media (prefers-reduced-motion: reduce) {
+  .cw, .sticker-enter, .sticker-float { animation: none !important; }
+  .sticker-depth, .sticker-hover { transition: none !important; transform: none !important; }
+  .sticker-group:hover .sticker-hover { transform: none !important; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Piezas clickeables del collage                                      */
+/* ------------------------------------------------------------------ */
+.cw-btn {
+  display: flex; flex-direction: column; text-align: left; cursor: pointer;
+  font: inherit; color: inherit;
+  box-shadow: 0 10px 24px -10px rgba(58, 51, 46, 0.35);
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+/* Eleva ~3 px reales (se compensa la escala del collage) y aumenta la sombra */
+@media (hover: hover) {
+  .cw-btn:hover { transform: translateY(calc(-3px / var(--s, 1))); box-shadow: 0 18px 30px -12px rgba(11, 54, 154, 0.38); }
+}
+.cw-btn:focus-visible { outline: 3px solid #C34811; outline-offset: 3px; transform: translateY(calc(-3px / var(--s, 1))); box-shadow: 0 18px 30px -12px rgba(11, 54, 154, 0.38); }
+.cw-btn:active { transform: translateY(0); }
+
+/* Zona clickeable del sticker: sigue su silueta, no su caja */
+.sticker-hit {
+  position: absolute; inset: 0; cursor: pointer; background: transparent; border: 0; padding: 0;
+  pointer-events: auto; -webkit-tap-highlight-color: transparent;
+  clip-path: polygon(55.3% 2.6%, 52.9% 4.6%, 51.1% 6.6%, 49.4% 8.5%, 46.3% 10.5%, 44.9% 12.5%, 43.7% 14.5%, 42.6% 16.5%, 41.6% 18.5%, 41.1% 20.5%, 40.8% 22.5%, 40.1% 24.5%, 39.8% 26.5%, 39.7% 28.5%, 39.6% 30.5%, 38.0% 32.5%, 35.9% 34.5%, 13.4% 36.5%, 11.9% 38.5%, 8.2% 40.5%, 7.6% 42.5%, 7.6% 44.4%, 6.3% 46.4%, 5.3% 48.4%, 4.6% 50.4%, 3.9% 52.4%, 3.2% 54.4%, 2.6% 56.4%, 1.8% 58.4%, 1.1% 60.4%, 0.8% 62.4%, 1.1% 64.4%, 0.9% 66.4%, 0.9% 68.4%, 1.7% 70.4%, 2.7% 72.4%, 3.6% 74.4%, 4.6% 76.4%, 5.2% 78.3%, 5.8% 80.3%, 6.6% 82.3%, 7.9% 84.3%, 11.2% 86.3%, 38.0% 88.3%, 40.0% 90.3%, 41.4% 92.3%, 44.8% 94.3%, 50.8% 96.3%, 54.6% 98.3%, 65.9% 98.3%, 73.1% 96.3%, 75.6% 94.3%, 77.9% 92.3%, 79.7% 90.3%, 80.9% 88.3%, 82.1% 86.3%, 83.2% 84.3%, 84.3% 82.3%, 85.3% 80.3%, 85.9% 78.3%, 86.1% 76.4%, 86.9% 74.4%, 90.1% 72.4%, 92.7% 70.4%, 94.8% 68.4%, 96.4% 66.4%, 97.7% 64.4%, 98.3% 62.4%, 98.7% 60.4%, 99.0% 58.4%, 99.3% 56.4%, 99.4% 54.4%, 99.1% 52.4%, 98.6% 50.4%, 98.0% 48.4%, 96.9% 46.4%, 95.0% 44.4%, 93.0% 42.5%, 90.7% 40.5%, 88.3% 38.5%, 86.9% 36.5%, 85.6% 34.5%, 85.6% 32.5%, 85.4% 30.5%, 85.2% 28.5%, 85.0% 26.5%, 85.0% 24.5%, 84.4% 22.5%, 83.7% 20.5%, 83.2% 18.5%, 82.4% 16.5%, 81.2% 14.5%, 79.2% 12.5%, 78.3% 10.5%, 77.3% 8.5%, 75.4% 6.6%, 72.2% 4.6%, 66.4% 2.6%);
+}
+
+/* Ventana emergente de servicio */
+.svc-dialog {
+  padding: 0; border: 0; background: transparent; color: #0B369A;
+  width: min(460px, calc(100vw - 32px)); max-height: calc(100dvh - 32px);
+  margin: auto; overflow: visible;
+}
+.svc-dialog::backdrop { background: rgba(58, 51, 46, 0.45); backdrop-filter: blur(2px); }
+.svc-dialog[open] { animation: svc-in 200ms ease-out both; }
+.svc-dialog[open]::backdrop { animation: svc-fade 200ms ease-out both; }
+@keyframes svc-in { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes svc-fade { from { opacity: 0; } to { opacity: 1; } }
+html.svc-lock { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cw-btn { transition: none; }
+  .cw-btn:hover, .cw-btn:focus-visible { transform: none; }
+  .svc-dialog[open], .svc-dialog[open]::backdrop { animation: none; }
+}
+
+/* Títulos de las piezas del collage: legibles a cualquier escala (mín. ~9,5 px reales) */
+.cw-title { font-size: max(11px, calc(9.5px / var(--s, 1))); line-height: 1.15; }
+@media (max-width: 519px) { .cw-dots { display: none; } }
+
+/* Sticker sonriendo: mismo espacio que el original, transición de opacidad de 200 ms.
+   Escritorio: hover (o foco de teclado). Táctil: alterna al tocar (data-smile). */
+.sticker-smile { opacity: 0; transition: opacity 200ms ease; }
+@media (hover: hover) { .sticker-group:hover .sticker-smile { opacity: 1; } }
+.sticker-group:has(.sticker-hit:focus-visible) .sticker-smile,
+.sticker-group[data-smile="true"] .sticker-smile { opacity: 1; }
+.sticker-hit:focus-visible { outline: 3px solid #C34811; outline-offset: -3px; }
+@media (prefers-reduced-motion: reduce) { .sticker-smile { transition: none; } }
+/* Foco de teclado del sticker: contorno que sigue su silueta (el outline normal queda recortado) */
+.sticker-group:has(.sticker-hit:focus-visible) .sticker-hover {
+  filter: drop-shadow(0 0 2px #C34811) drop-shadow(0 0 2px #C34811) drop-shadow(0 0 1px #C34811);
 }

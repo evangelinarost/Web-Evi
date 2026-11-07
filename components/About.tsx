@@ -1,75 +1,26 @@
+import { about } from "@/lib/content";
+import Window from "./Window";
+
 export default function About() {
   return (
-    <section id="sobre-mi" className="relative py-28 px-6 overflow-hidden bg-[#FAF8F5]">
-      {/* Blobs orgánicos */}
-      <div className="mesh-blob pointer-events-none absolute -top-20 -right-20 w-[400px] h-[400px] rounded-full bg-[#822B5B]/24 blur-[90px]" />
-      <div className="mesh-blob-alt pointer-events-none absolute bottom-0 left-0 w-[350px] h-[350px] rounded-full bg-[#3FBDBC]/16 blur-[80px]" />
-
-      {/* Dot grid */}
-      <div className="dot-grid absolute inset-0 opacity-40" />
-
-      {/* Ghost text */}
-      <div className="pointer-events-none absolute bottom-0 right-0 overflow-hidden select-none">
-        <span className="block text-[120px] sm:text-[180px] font-black text-[#1A1A1A]/[0.025] leading-none whitespace-nowrap">
-          SOBRE MÍ
-        </span>
-      </div>
-
-      <div className="relative z-10 max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
-          {/* Imagen / placeholder */}
-          <div className="reveal relative max-w-sm mx-auto lg:mx-0 w-full">
-            {/* Marco decorativo detrás */}
-            <div className="absolute -top-5 -left-5 w-full h-full rounded-3xl border-2 border-[#822B5B]/30" />
-            <div className="absolute -bottom-5 -right-5 w-full h-full rounded-3xl bg-gradient-to-br from-[#3FBDBC]/15 to-[#822B5B]/10" />
-
-            <div className="relative rounded-3xl overflow-hidden aspect-[3/4] border border-white/60 shadow-2xl shadow-[#1A1A1A]/10">
-              <img
-                src="https://pub-0cd1a326d662425eb94608296f4a31d0.r2.dev/Foto%20Perfil.jpg"
-                alt="Evangelina"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-[#822B5B]/20 to-transparent" />
+    <section id="sobre-mi" className="px-6 py-24">
+      <div className="mx-auto grid max-w-5xl items-center gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+        <div className="reveal mx-auto w-full max-w-sm -rotate-2">
+          <Window title="sobre_mi.jpg">
+            <div className="mx-2 mb-2 aspect-[4/5] overflow-hidden rounded-xl bg-[#CFC6BE]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={about.photo} alt={about.photoAlt} loading="lazy" className="h-full w-full object-cover" />
             </div>
-          </div>
+          </Window>
+        </div>
 
-          {/* Texto */}
-          <div className="reveal reveal-d2">
-            <span className="inline-flex items-center gap-2 text-sm font-semibold tracking-widest uppercase text-[#822B5B] mb-4">
-              <span className="w-4 h-px bg-[#822B5B]" />
-              Sobre mí
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-[#1A1A1A] mb-6 leading-tight">
-              Hola, soy <span className="text-[#822B5B]">Evangelina</span>
-            </h2>
-            <div className="space-y-4 text-[#1A1A1A]/65 leading-relaxed">
-              <p>
-                Trabajo ayudando a marcas y emprendedores a crecer en el mundo digital de forma estratégica.
-              </p>
-              <p>
-                Mi enfoque no es solo crear contenido, sino entender qué necesita cada marca y cómo comunicarlo para generar resultados reales.
-              </p>
-              <p>
-                Trabajo combinando creatividad con estrategia, integrando contenido, gestión y ahora sumamos desarrollo web para construir una presencia digital completa y coherente.
-              </p>
-              <p>
-                Me gusta involucrarme en cada proyecto y adaptarme a lo que cada marca necesita, buscando siempre que todo lo que se haga tenga un propósito.
-              </p>
-            </div>
-
-            <div className="mt-8 flex flex-wrap gap-3">
-              {["UGC", "Estrategia", "Desarrollo web", "Redes sociales"].map(
-                (tag) => (
-                  <span
-                    key={tag}
-                    className="px-4 py-2 rounded-full bg-white text-sm font-semibold text-[#1A1A1A] border border-[#1A1A1A]/10 shadow-sm"
-                  >
-                    {tag}
-                  </span>
-                )
-              )}
-            </div>
+        <div className="reveal reveal-d2">
+          <p className="text-sm font-bold uppercase tracking-[0.28em] text-[#0B369A]">{about.eyebrow}</p>
+          <h2 className="mt-4 text-4xl font-extrabold leading-[1.05] tracking-tight text-[#0B369A] sm:text-5xl">
+            {about.title}
+          </h2>
+          <div className="mt-6 space-y-4 text-lg leading-relaxed text-[#0B369A]/80">
+            {about.paragraphs.map((p) => <p key={p}>{p}</p>)}
           </div>
         </div>
       </div>
