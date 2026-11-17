@@ -1,76 +1,76 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { hero } from "@/lib/content";
 
+/** Tiempo (ms) que dura la cara sonriente tras un toque, antes de volver sola al original. */
+const SMILE_MS = 2000;
+
 /**
- * Sticker animado, como capa independiente del collage.
- * Capas (cada una con su propia transformación, para que no se pisen):
- *   profundidad (cursor) > entrada > flote > hover (zoom)
+ * Sticker de Evii: capa independiente del collage.
  *
- * Expresión: si existe la versión sonriente (`smileSrc`), el sticker tiene su PROPIO control
- * (un botón con la silueta del recorte), separado del de la ventana "Creación de contenido":
- *   - ratón: al pasar el cursor sobre la cara aparece la sonrisa (opacidad, 200 ms);
- *   - táctil: cada toque alterna entre las dos imágenes;
- *   - teclado: el foco muestra la sonrisa.
- * Ambas imágenes ocupan exactamente el mismo espacio (inset-0, object-contain), sin saltos.
- * Sin `smileSrc` no hay control propio y el toque cae en la ventana de abajo.
+ * Capas (cada una con su transformación, para que no se pisen):
+ *   posición (este contenedor) > flotación (CSS, respeta "reducir movimiento") > imágenes
+ *
+ * Expresión:
+ *  - Ratón: al pasar el cursor sobre la cara aparece la sonrisa (opacidad, 200 ms).
+ *  - Toque: muestra la sonrisa y vuelve al original a los 2 s, o con otro toque.
+ *  - Teclado: es un <button>; Enter o Espacio hacen lo mismo que el toque.
+ * Ambas imágenes comparten la misma caja, así que no hay saltos al cambiar.
+ * El botón sigue la silueta del recorte (clip-path) para no tapar las ventanas vecinas.
+ * Sin `smileSrc` (archivo inexistente) el sticker queda solo con la flotación.
  */
 export default function Sticker({
+  smileSrc,
   className = "",
   style,
-  smileSrc,
 }: {
+  smileSrc: string | null;
   className?: string;
   style?: React.CSSProperties;
-  smileSrc: string | null;
 }) {
-  const [smileOk, setSmileOk] = useState(true);
   const [smile, setSmile] = useState(false);
-  const hasSmile = !!smileSrc && smileOk;
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const onToggle = () => {
-    // Con ratón la expresión depende del hover; solo en táctil se alterna al tocar.
-    if (window.matchMedia("(hover: none)").matches) setSmile((v) => !v);
+  useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
+
+  const toggle = () => {
+    if (timer.current) { clearTimeout(timer.current); timer.current = null; }
+    if (smile) { setSmile(false); return; }
+    setSmile(true);
+    timer.current = setTimeout(() => { setSmile(false); timer.current = null; }, SMILE_MS);
   };
 
   return (
-    <div
-      className={`sticker-depth sticker-group pointer-events-none ${className}`}
-      style={style}
-      data-smile={smile}
-    >
-      <div className="sticker-enter h-full">
-        <div className="sticker-float h-full">
-          <div className="sticker-hover relative h-full origin-center">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+    <div className={`sticker-group pointer-events-none ${className}`} style={style} data-smile={smile}>
+      <div className="sticker-float h-full">
+        <div className="relative h-full">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={hero.stickerSrc}
+            alt={hero.stickerAlt}
+            draggable={false}
+            className="sticker-base absolute inset-0 h-full w-full object-contain drop-shadow-[0_8px_14px_rgba(58,51,46,0.3)]"
+          />
+          {smileSrc && (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={hero.stickerSrc}
-              alt={hero.stickerAlt}
+              src={smileSrc}
+              alt=""
+              aria-hidden
               draggable={false}
-              className="absolute inset-0 h-full w-full object-contain drop-shadow-[0_12px_14px_rgba(11,54,154,0.35)]"
+              className="sticker-smile absolute inset-0 h-full w-full object-contain drop-shadow-[0_8px_14px_rgba(58,51,46,0.3)]"
             />
-            {hasSmile && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={smileSrc!}
-                alt=""
-                aria-hidden
-                draggable={false}
-                onError={() => setSmileOk(false)}
-                className="sticker-smile absolute inset-0 h-full w-full object-contain drop-shadow-[0_12px_14px_rgba(11,54,154,0.35)]"
-              />
-            )}
-            {hasSmile && (
-              <button
-                type="button"
-                className="sticker-hit"
-                aria-label="Cambiar la expresión de Evii"
-                aria-pressed={smile}
-                onClick={onToggle}
-              />
-            )}
-          </div>
+          )}
+          {smileSrc && (
+            <button
+              type="button"
+              className="sticker-hit"
+              aria-label="Cambiar la expresión de Evii"
+              aria-pressed={smile}
+              onClick={toggle}
+            />
+          )}
         </div>
       </div>
     </div>

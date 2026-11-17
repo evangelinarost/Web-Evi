@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import ScrollReveal from "@/components/ScrollReveal";
+import { site } from "@/lib/content";
 
 const hanken = Hanken_Grotesk({
   variable: "--font-hanken",
@@ -12,9 +10,8 @@ const hanken = Hanken_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Evii Rost | Marketing digital y community manager",
-  description:
-    "Evii Rost, community manager y creadora de contenido de Córdoba, Argentina. Estrategia, contenido y campañas para que tu marca conecte con las personas.",
+  title: site.title,
+  description: site.description,
 };
 
 export default function RootLayout({
@@ -24,12 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es-AR" className={hanken.variable}>
-      <body>
-        <Navbar />
-        {children}
-        <Footer />
-        <ScrollReveal />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

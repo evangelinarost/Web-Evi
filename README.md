@@ -55,28 +55,38 @@ Otros comandos:
 
 ```
 app/
-  layout.tsx            Título, descripción (SEO) y fuentes
-  page.tsx              Arma la página: orden de las secciones
-  globals.css           Estilos globales / Tailwind
-  api/contact/route.ts  Endpoint POST /api/contact (envía el mail con Resend)
-components/             Una sección por archivo
-  Hero, Marquee, Services, Portfolio, Process, About,
-  Differentiator, Stats, CTA (contiene el formulario), Footer, Navbar, ScrollReveal
-public/                 Archivos estáticos servidos tal cual (/annapurna.png, /reels/...)
+  layout.tsx              Fuente (Hanken Grotesk), idioma y metadatos generales
+  globals.css             Estilos compartidos (Tailwind + collage, cartelitos y sticker)
+  page.tsx                Home
+  contenido/page.tsx      Creación de contenido para marcas (logos y videos)
+  proyectos/page.tsx      Proyectos
+  servicios/page.tsx      Servicios
+  sobre-mi/page.tsx       Sobre mí
+  casos/wald/page.tsx     Caso WALD Gym Zone (marcado como no indexable)
+  api/contact/route.ts    Endpoint POST /api/contact (envía el mail con Resend; hoy el sitio no lo usa)
+components/               Piezas compartidas: SiteHeader, Hero (collage), Sticker, DeskWindow,
+                          ProjectCards, Shot, Placeholders, ContactLinks, Circle
+lib/content.ts            TODOS los textos, enlaces y datos editables
+lib/assets.ts             Detecta si una imagen existe en /public (si no, muestra un marcador)
+public/sticker/           Sticker de Evii (eva.webp) y su versión sonriente (eva-sonriendo.webp)
+public/casos/             Capturas del caso WALD (ver abajo)
 ```
+
+> `components/` también conserva archivos de diseños anteriores (Portfolio, Process, Stats, etc.)
+> que ya no se usan en ninguna página.
 
 ## Cómo modificar la web
 
-- **Orden de secciones:** `app/page.tsx`.
-- **Textos y diseño de una sección:** el archivo correspondiente en `components/`.
-- **Portfolio** (`components/Portfolio.tsx`): ahí están las listas de contenido:
-  - `reels`: videos verticales de Community Manager (pueden ser locales, `/reels/...`).
-  - `carousels`: carruseles, cada uno con sus slides (URLs de R2).
-  - `contentGroups`: videos de UGC / Agencia (URLs de R2).
-  - `websites`: sitios web desarrollados (nombre, link e imagen en `public/`).
-- **Título/descripción para buscadores:** `app/layout.tsx`.
+- **Textos, enlaces, WhatsApp e Instagram:** `lib/content.ts` (los [MARCADORES] se reemplazan ahí).
+- **Menú:** `navHome`, `navPages` y `navCase` en `lib/content.ts`.
+- **Imágenes del caso WALD y de Servicios:** guardá estos archivos en `public/casos/` (JPG o WebP livianos;
+  si pesan mucho, van a Cloudflare R2): `reel-gato-wald.jpg`, `carrusel-reglas.jpg`, `carrusel-gatitos.jpg`.
+  Se activan solos al compilar; mientras no existan se ve un marcador.
+- **Sticker sonriente:** `public/sticker/eva-sonriendo.webp` (misma caja que `eva.webp`).
+- **Título/descripción para buscadores:** `app/layout.tsx` y el `metadata` de cada página.
 - **Destinatario y remitente de los mails:** `app/api/contact/route.ts`.
-- **Contacto, WhatsApp e Instagram:** están escritos directamente en `components/CTA.tsx` y `components/Footer.tsx`.
+- **Publicar el caso WALD:** cuando Leo dé el OK, borrar la línea `robots` del `metadata` en
+  `app/casos/wald/page.tsx` (hoy la página es `noindex`).
 
 ## Formulario de contacto (Resend)
 
