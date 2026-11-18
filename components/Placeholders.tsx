@@ -26,7 +26,7 @@ export function VideoFace({ tone }: { tone: VideoTone }) {
   const t = TONES[tone];
   return (
     <span
-      className="m-4 rounded-full px-3.5 py-1.5 text-[13px] font-bold uppercase tracking-[0.1em]"
+      className="m-3 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.06em] min-[640px]:m-4 min-[640px]:px-3.5 min-[640px]:text-[13px] min-[640px]:tracking-[0.1em]"
       style={{ background: t.tagBg, color: t.tagFg }}
     >
       Próximamente

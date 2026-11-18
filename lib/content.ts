@@ -47,6 +47,13 @@ export const navCase: NavItem[] = [
 export const hero = {
   title: "Hola, soy Evii.",
   eyebrow: "Marketing digital",
+  role: "Community manager",
+  /** Textos cortos de las ventanas en celular. */
+  mobileCards: {
+    redes: "Calendario y seguimiento mes a mes.",
+    video: "Reels con ritmo y subtítulos.",
+    pauta: "Campañas en Meta Ads.",
+  },
   hint: "Pasá el mouse (o tocá) cada ventana para ver qué incluye",
   cta: { label: "Ver mi trabajo", href: "#contenido" },
   /** Sticker: WebP con fondo transparente en public/sticker/. */

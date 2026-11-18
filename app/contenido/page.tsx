@@ -26,7 +26,7 @@ export default function Contenido() {
         </section>
 
         {/* Videos: marcadores 9:16 hasta tener los Reels reales (no son enlaces todavía) */}
-        <section id="videos" aria-label="Videos" className="scroll-mt-6 grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-6">
+        <section id="videos" aria-label="Videos" className="scroll-mt-6 grid grid-cols-2 gap-4 min-[640px]:grid-cols-[repeat(auto-fill,minmax(220px,1fr))] min-[640px]:gap-6">
           {videos.page.map((tone, i) => (
             <div key={i} className={videoCardClass} style={{ background: TONES[tone].bg }}>
               <VideoFace tone={tone} />

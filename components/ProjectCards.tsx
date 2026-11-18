@@ -17,7 +17,7 @@ export default function ProjectCards({ waldImage }: { waldImage: string | null }
           </div>
           <div className="flex items-end justify-between gap-3 text-white">
             <div>
-              <div className="text-[26px] font-bold tracking-[-0.01em]">{w.name}</div>
+              <div className="text-[26px] font-bold leading-[1.1] tracking-[-0.01em]">{w.name}</div>
               <div className="mt-1 text-[15px] text-[#ECE7E2]">{w.meta}</div>
             </div>
             <div className="shrink-0 whitespace-nowrap text-[30px] font-bold leading-none text-[#FF8A5C]">{w.stat}</div>
@@ -33,7 +33,7 @@ export default function ProjectCards({ waldImage }: { waldImage: string | null }
           </div>
           <div className="flex items-end justify-between gap-3 text-white">
             <div>
-              <div className="text-[26px] font-bold tracking-[-0.01em]">{im.name}</div>
+              <div className="text-[26px] font-bold leading-[1.1] tracking-[-0.01em]">{im.name}</div>
               <div className="mt-1 text-[15px] text-[#FAF8F5]">{im.meta}</div>
             </div>
             <div className="shrink-0 whitespace-nowrap text-[30px] font-bold leading-none text-white">{im.stat}</div>

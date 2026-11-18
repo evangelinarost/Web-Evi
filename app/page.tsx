@@ -35,34 +35,40 @@ export default function Home() {
 
         {/* Creación de contenido para marcas */}
         <section id="contenido" className="relative">
-          <div className="mx-auto flex max-w-[1280px] flex-col gap-10 px-5 py-[88px] min-[901px]:px-10">
+          <div className="mx-auto flex max-w-[1280px] flex-col gap-8 px-5 py-14 min-[901px]:gap-10 min-[901px]:px-10 min-[901px]:py-[88px]">
             <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
               <div className="flex max-w-[760px] flex-col gap-3">
                 <h2 className="text-[40px] font-bold leading-[1.04] tracking-[-0.03em] text-[#0B369A] min-[901px]:text-[56px]">{contentSection.title}</h2>
                 <p className="text-2xl font-medium leading-[1.35]">{contentSection.subtitle}</p>
               </div>
-              <Link href="/contenido" className="text-[17px] font-bold text-[#0B369A] no-underline decoration-[#C34811] decoration-2 underline-offset-[6px] hover:underline">
+              <Link href="/contenido" className="max-[900px]:hidden text-[17px] font-bold text-[#0B369A] no-underline decoration-[#C34811] decoration-2 underline-offset-[6px] hover:underline">
                 {contentSection.allLink}
               </Link>
             </div>
-            <div className="flex flex-wrap justify-between gap-5">
+            <div className="grid grid-cols-1 min-[901px]:flex min-[901px]:flex-wrap min-[901px]:justify-between min-[901px]:gap-5">
               {videos.home.map((tone, i) => (
                 <Link
                   key={i}
                   href="/contenido"
                   aria-label="Ver los videos de contenido para marcas"
-                  className={`${videoCardClass} max-w-[260px] flex-[1_1_200px] no-underline`}
+                  className={`${videoCardClass} no-underline max-[900px]:mx-auto max-[900px]:w-full max-[900px]:max-w-[230px] min-[901px]:max-w-[260px] min-[901px]:flex-[1_1_200px] ${i > 0 ? "max-[900px]:hidden" : ""}`}
                   style={{ background: TONES[tone].bg }}
                 >
                   <VideoFace tone={tone} />
                 </Link>
               ))}
             </div>
+            <Link
+              href="/contenido"
+              className="self-center rounded-full bg-[#C34811] px-7 py-3.5 text-base font-bold text-white no-underline transition hover:bg-[#0B369A] min-[901px]:hidden"
+            >
+              {contentSection.allLink}
+            </Link>
           </div>
         </section>
 
         {/* Proyectos */}
-        <section id="proyectos" className="relative mx-auto flex max-w-[1280px] flex-col gap-9 px-5 py-24 min-[901px]:px-10">
+        <section id="proyectos" className="relative mx-auto flex max-w-[1280px] flex-col gap-9 px-5 py-14 min-[901px]:px-10 min-[901px]:py-24">
           <div className="flex flex-wrap items-baseline justify-between gap-3">
             <h2 className="text-5xl font-bold leading-[1.05] tracking-[-0.02em] text-[#0B369A]">{projects.title}</h2>
             <Link href="/proyectos" className="text-[17px] font-bold text-[#0B369A] no-underline decoration-[#C34811] decoration-2 underline-offset-[6px] hover:underline">
@@ -74,7 +80,7 @@ export default function Home() {
 
         {/* Sobre mí: versión resumida de la página /sobre-mi, con el mismo diseño */}
         <section id="sobre-mi" className="relative">
-          <div className="mx-auto flex max-w-[1280px] flex-wrap items-center gap-x-[72px] gap-y-12 px-5 py-24 min-[901px]:px-10">
+          <div className="mx-auto flex max-w-[1280px] flex-wrap items-center gap-x-[72px] gap-y-10 px-5 py-14 min-[901px]:gap-y-12 min-[901px]:px-10 min-[901px]:py-24">
             <div className="flex min-w-0 flex-[1_1_380px] justify-center">
               <AboutPhoto lazy />
             </div>

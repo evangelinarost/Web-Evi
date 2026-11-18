@@ -1,6 +1,6 @@
 import { brandLogos } from "@/lib/content";
 
-/** Un logo: siempre 40 px de alto. Los que traen fondo de color van como bloque con esquinas de 10 px. */
+/** Un logo: siempre 24 px de alto y algo atenuados, para que no resalten. Los que traen fondo de color van como bloque con esquinas de 10 px. */
 function Logo({ logo }: { logo: (typeof brandLogos)[number] }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
@@ -12,7 +12,7 @@ function Logo({ logo }: { logo: (typeof brandLogos)[number] }) {
       loading="lazy"
       decoding="async"
       draggable={false}
-      className={`block h-10 w-auto max-w-none shrink-0 ${logo.block ? "rounded-[10px]" : ""}`}
+      className={`block h-6 w-auto max-w-none shrink-0 opacity-70 ${logo.block ? "rounded-[10px]" : ""}`}
     />
   );
 }
@@ -40,7 +40,7 @@ export function LogoMarquee() {
 /** Grilla fija (sin movimiento) para la página de Contenido. */
 export function LogoGrid() {
   return (
-    <ul className="flex flex-wrap items-center gap-x-14 gap-y-8">
+    <ul className="flex flex-wrap items-center gap-x-10 gap-y-6">
       {brandLogos.map((l) => (
         <li key={l.src}><Logo logo={l} /></li>
       ))}

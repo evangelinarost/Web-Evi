@@ -55,7 +55,7 @@ function WorkCard({ c }: { c: Card }) {
 /** Bloque "Cómo trabajar conmigo": tres formas de contratar, con la oferta nueva destacada. */
 export default function HowToWork() {
   return (
-    <section className="relative mx-auto flex max-w-[1280px] flex-col gap-10 px-5 pb-10 pt-[104px] min-[901px]:px-10" aria-labelledby="como-trabajar">
+    <section className="relative mx-auto flex max-w-[1280px] flex-col gap-10 px-5 pb-10 pt-16 min-[901px]:px-10 min-[901px]:pt-[104px]" aria-labelledby="como-trabajar">
       <div className="flex max-w-[820px] flex-col gap-3.5">
         <span className="text-[15px] font-bold uppercase tracking-[0.16em]">{howToWork.eyebrow}</span>
         <h2 id="como-trabajar" className="text-[38px] font-bold leading-[1.04] tracking-[-0.03em] text-[#0B369A] min-[901px]:text-[56px]">{howToWork.title}</h2>

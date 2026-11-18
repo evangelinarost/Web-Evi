@@ -96,13 +96,14 @@ export default function Hero({ smileSrc }: { smileSrc: string | null }) {
   return (
     <section
       id="inicio"
-      className="relative z-10 mx-auto flex max-w-[1280px] flex-col items-center gap-9 px-5 pb-[120px] pt-10 text-center min-[901px]:px-10"
+      className="relative z-10 mx-auto flex max-w-[1280px] flex-col items-center gap-9 px-5 pb-16 pt-6 text-center min-[901px]:px-10 min-[901px]:pb-[120px] min-[901px]:pt-10"
     >
       <h1 className="text-[54px] font-bold leading-none tracking-[-0.03em] text-[#0B369A] min-[901px]:text-[96px]">
         {hero.title}
       </h1>
-      <p className="-mt-3 text-[15px] font-bold uppercase tracking-[0.16em]">{hero.eyebrow}</p>
+      <p className="-mt-3 hidden text-[15px] font-bold uppercase tracking-[0.16em] min-[640px]:block">{hero.eyebrow}</p>
 
+      <div className="hidden flex-col items-center gap-9 min-[640px]:flex">
       {/* Collage de servicios (700 × 340): cinco piezas, cada una un botón */}
       <div className="collage-box" role="group" aria-label="Mis servicios">
         <div className="collage-stage">
@@ -185,7 +186,65 @@ export default function Hero({ smileSrc }: { smileSrc: string | null }) {
         </div>
       </div>
 
-      <p className="-mt-2 text-sm font-semibold">{hero.hint}</p>
+        <p className="-mt-2 text-sm font-semibold">{hero.hint}</p>
+      </div>
+
+      {/* Celular (< 640 px): tarjeta azul con el sticker y cuatro ventanas en grilla */}
+      <div className="flex w-full flex-col gap-4 text-left min-[640px]:hidden">
+        <div className="relative h-[230px] rounded-2xl border border-[#D9D1CA] bg-[#0B369A] shadow-[0_12px_28px_rgba(58,51,46,0.18)]">
+          <div className="absolute left-5 top-7 z-[1] flex max-w-[44%] flex-col gap-2">
+            <p className="text-[30px] font-bold leading-[1.02] tracking-[-0.02em] text-white">{hero.eyebrow}</p>
+            <p className="text-[18px] font-bold leading-[1.1] text-[#FF8A5C]">{hero.role}</p>
+          </div>
+          <span className="absolute inset-x-0 bottom-0 flex h-[34px] items-center gap-[5px] rounded-b-2xl border-t border-[#D9D1CA] bg-[#FAF8F5] px-3">
+            <i className="block h-[7px] w-[7px] rounded-full bg-[#C34811]" />
+            <i className="block h-[7px] w-[7px] rounded-full bg-[#A89F96]" />
+            <i className="block h-[7px] w-[7px] rounded-full bg-[#A89F96]" />
+            <b className="ml-2 text-[11px] font-bold text-[#0B369A]">Creación de contenido</b>
+          </span>
+          <Sticker smileSrc={smileSrc} className="absolute z-[4]" style={{ right: -14, top: -40, width: 205, height: 160 }} />
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          {[
+            { id: "redes", title: "Gestión de redes", text: hero.mobileCards.redes },
+            { id: "video", title: "Edición de video", text: hero.mobileCards.video },
+            { id: "pauta", title: "Gestión de pauta", text: hero.mobileCards.pauta },
+          ].map((c) => (
+            <div key={c.id} className="flex flex-col overflow-hidden rounded-xl border border-[#D9D1CA] bg-[#FAF8F5] shadow-[0_8px_20px_rgba(58,51,46,0.12)]">
+              <Bar title={c.title} />
+              <div className="flex flex-1 flex-col gap-3 p-3">
+                {c.id === "redes" && (
+                  <span aria-hidden className="flex gap-1">
+                    {["#0B369A", "#ECE7E2", "#C34811", "#ECE7E2", "#0B369A", "#C34811", "#ECE7E2"].map((c2, i) => (
+                      <i key={i} className="block h-[18px] flex-1 rounded-[3px]" style={{ background: c2 }} />
+                    ))}
+                  </span>
+                )}
+                {c.id === "video" && (
+                  <span aria-hidden className="flex flex-col gap-1">
+                    <span className="flex gap-1"><i className="block h-3.5 flex-[3] rounded-[3px] bg-[#0B369A]" /><i className="block h-3.5 flex-[2] rounded-[3px] bg-[#C34811]" /><i className="block h-3.5 flex-[4] rounded-[3px] bg-[#0B369A]" /></span>
+                    <span className="flex gap-1"><i className="block h-3 flex-[4] rounded-[3px] bg-[#A89F96]" /><i className="block h-3 flex-[4] rounded-[3px] bg-[#D9D1CA]" /></span>
+                  </span>
+                )}
+                {c.id === "pauta" && (
+                  <svg aria-hidden viewBox="0 0 120 40" className="block h-10 w-full">
+                    <path d="M6 32 L32 24 L58 27 L84 15 L114 6" fill="none" stroke="#0B369A" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M6 37 L32 34 L58 32 L84 28 L114 22" fill="none" stroke="#C34811" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="1 6" />
+                  </svg>
+                )}
+                <p className="text-[15px] font-semibold leading-[1.3] text-[#3A332E]">{c.text}</p>
+              </div>
+            </div>
+          ))}
+          <div className="flex flex-col justify-between rounded-xl border-[4px] border-[#FAF8F5] bg-[#0B369A] p-3.5 text-white shadow-[0_8px_20px_rgba(58,51,46,0.2)]">
+            <span className="text-[11px] font-bold uppercase tracking-[0.08em]">Diseño de posteos</span>
+            <span className="mt-3 text-[24px] font-bold leading-[1.05] tracking-[-0.02em]">Tu marca,<br /><span className="text-[#FF8A5C]">en el feed</span></span>
+            <span className="mt-3 h-1.5 w-10 rounded-[3px] bg-[#FF8A5C]" />
+          </div>
+        </div>
+      </div>
+
       <Link
         href={hero.cta.href}
         className="mt-4 rounded-full bg-[#C34811] px-[34px] py-4 text-[17px] font-bold text-white no-underline transition hover:bg-[#0B369A]"
